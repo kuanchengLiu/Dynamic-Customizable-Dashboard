@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for react-grid-layout */
+.react-grid-item.react-grid-placeholder {
+  background: #3b82f6;
+  opacity: 0.2;
+  border-radius: 0.5rem;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure drag handle works properly */
+.widget-drag-handle {
+  cursor: move;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .react-grid-layout {
+    width: 100% !important;
+  }
+  
+  .react-grid-item {
+    width: 100% !important;
+    transform: none !important;
+    position: relative !important;
+    margin-bottom: 1rem;
+  }
+}

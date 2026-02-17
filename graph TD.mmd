@@ -1,0 +1,18 @@
+graph TD
+    App --> DashboardLayout
+    App --> Sidebar/Toolbar
+    
+    DashboardLayout --> GridContainer
+    GridContainer --> WidgetWrapper(Draggable/Resizable)
+    
+    WidgetWrapper --> WidgetHeader(Controls)
+    WidgetWrapper --> DataFetcher(Generic Query Component)
+    
+    DataFetcher --> VisualizationLayer
+    
+    VisualizationLayer --> JsonView
+    VisualizationLayer --> TableView
+    VisualizationLayer --> ChartView
+    
+    WidgetHeader --> SettingsModal
+    SettingsModal --> ApiConfigForm
