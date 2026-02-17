@@ -14,13 +14,15 @@ export const DataFetcher: React.FC<DataFetcherProps> = ({
   viewType,
   dataKey,
 }) => {
+  const hasDataSource = Boolean(apiConfig.endpoint || apiConfig.useDefaultData);
+  
   const { data, isLoading, isError, error, refetch } = useFetchData({
     apiConfig,
     dataKey,
-    enabled: !!apiConfig.endpoint,
+    enabled: hasDataSource,
   });
 
-  if (!apiConfig.endpoint) {
+  if (!hasDataSource) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500">
         <AlertCircle size={32} className="mb-2" />

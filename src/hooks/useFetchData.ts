@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { GraphQLClient, gql } from 'graphql-request';
 import type { ApiConfig } from '@/types';
 import { get } from 'lodash-es';
+import { DEFAULT_SAMPLE_DATA, DefaultDataKey } from '@/data/defaultData';
 
 interface UseFetchDataOptions {
   apiConfig: ApiConfig;
@@ -46,10 +47,23 @@ async function fetchGraphQLData(config: ApiConfig): Promise<unknown> {
   return client.request(query, parsedVariables);
 }
 
+function getDefaultData(key: string): unknown {
+  return DEFAULT_SAMPLE_DATA[key as DefaultDataKey] || DEFAULT_SAMPLE_DATA.salesData;
+}
+
 export function useFetchData({ apiConfig, dataKey, enabled = true }: UseFetchDataOptions) {
   return useQuery({
-    queryKey: ['widget-data', apiConfig],
+    queryKey: ['widget-data', apiConfig, dataKey],
     queryFn: async () => {
+      // If using default data, return it directly
+      if (apiConfig.useDefaultData && apiConfig.defaultDataKey) {
+        const data = getDefaultData(apiConfig.defaultDataKey);
+        if (dataKey) {
+          return get(data, dataKey);
+        }
+        return data;
+      }
+
       if (!apiConfig.endpoint) {
         throw new Error('No endpoint configured');
       }
@@ -69,7 +83,7 @@ export function useFetchData({ apiConfig, dataKey, enabled = true }: UseFetchDat
 
       return data;
     },
-    enabled: enabled && !!apiConfig.endpoint,
+    enabled: enabled && (!!apiConfig.endpoint || !!apiConfig.useDefaultData),
     staleTime: 30000, // 30 seconds
     retry: 1,
   });

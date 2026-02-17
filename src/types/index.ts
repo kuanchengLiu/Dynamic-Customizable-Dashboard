@@ -9,6 +9,8 @@ export interface ApiConfig {
   headers?: Record<string, string>;
   body?: string;
   variables?: string;
+  useDefaultData?: boolean;
+  defaultDataKey?: string;
 }
 
 // Widget Layout (react-grid-layout compatible)
