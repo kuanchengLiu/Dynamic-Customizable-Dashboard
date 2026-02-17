@@ -2,33 +2,228 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Cyberpunk base styles */
+:root {
+  --cyber-cyan: #00f5ff;
+  --cyber-pink: #ff006e;
+  --cyber-purple: #9d4edd;
+  --cyber-green: #00ff9f;
+  --cyber-yellow: #ffd60a;
+  --cyber-dark: #0a0a0f;
+}
+
+/* Custom scrollbar for cyberpunk theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 245, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--cyber-cyan), var(--cyber-purple));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--cyber-pink), var(--cyber-cyan));
+}
+
 /* Custom styles for react-grid-layout */
 .react-grid-item.react-grid-placeholder {
-  background: #3b82f6;
-  opacity: 0.2;
+  background: linear-gradient(135deg, var(--cyber-cyan), var(--cyber-purple));
+  opacity: 0.3;
   border-radius: 0.5rem;
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
 }
 
 .react-grid-item > .react-resizable-handle {
   position: absolute;
   width: 20px;
   height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 1;
+}
+
+/* Corner handles */
+.react-grid-item > .react-resizable-handle-se {
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+.react-grid-item > .react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
+}
+
+.react-grid-item > .react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+
+.react-grid-item > .react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+
+/* Edge handles */
+.react-grid-item > .react-resizable-handle-n {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: n-resize;
+  width: 40px;
+}
+
+.react-grid-item > .react-resizable-handle-s {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: s-resize;
+  width: 40px;
+}
+
+.react-grid-item > .react-resizable-handle-e {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: e-resize;
+  height: 40px;
+}
+
+.react-grid-item > .react-resizable-handle-w {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: w-resize;
+  height: 40px;
+}
+
+/* Handle visual indicators */
 .react-grid-item > .react-resizable-handle::after {
   content: '';
   position: absolute;
-  right: 3px;
-  bottom: 3px;
   width: 8px;
   height: 8px;
-  border-right: 2px solid rgba(0, 0, 0, 0.3);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  background: var(--cyber-cyan);
+  border-radius: 2px;
+  opacity: 0.6;
+  transition: all 0.2s;
+  box-shadow: 0 0 8px var(--cyber-cyan);
+}
+
+.react-grid-item > .react-resizable-handle-se::after {
+  right: 3px;
+  bottom: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-sw::after {
+  left: 3px;
+  bottom: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-ne::after {
+  right: 3px;
+  top: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-nw::after {
+  left: 3px;
+  top: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-n::after,
+.react-grid-item > .react-resizable-handle-s::after {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 4px;
+}
+
+.react-grid-item > .react-resizable-handle-n::after {
+  top: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-s::after {
+  bottom: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-e::after,
+.react-grid-item > .react-resizable-handle-w::after {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+}
+
+.react-grid-item > .react-resizable-handle-e::after {
+  right: 3px;
+}
+
+.react-grid-item > .react-resizable-handle-w::after {
+  left: 3px;
+}
+
+.react-grid-item:hover > .react-resizable-handle::after {
+  opacity: 1;
+  box-shadow: 0 0 15px var(--cyber-cyan);
 }
 
 /* Ensure drag handle works properly */
 .widget-drag-handle {
   cursor: move;
+}
+
+/* Cyberpunk grid background */
+.cyber-grid-bg {
+  background-color: #0a0a0f;
+  background-image: 
+    linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glow animations */
+@keyframes cyber-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--cyber-cyan), 0 0 10px var(--cyber-cyan), 0 0 20px rgba(0, 245, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--cyber-cyan), 0 0 20px var(--cyber-cyan), 0 0 40px rgba(0, 245, 255, 0.5);
+  }
+}
+
+.cyber-glow {
+  animation: cyber-glow 2s ease-in-out infinite;
+}
+
+/* Neon text effect */
+.neon-text {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/* Card hover effect */
+.cyber-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 245, 255, 0.2);
+}
+
+.cyber-card:hover {
+  border-color: rgba(0, 245, 255, 0.5);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.2);
 }
 
 /* Responsive adjustments */

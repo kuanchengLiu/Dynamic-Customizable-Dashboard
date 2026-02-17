@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface TableViewProps {
   data: unknown;
 }
@@ -8,33 +10,69 @@ export const TableView: React.FC<TableViewProps> = ({ data }) => {
     const columns = Object.keys(data[0] as Record<string, unknown>);
 
     return (
-      <div className="overflow-auto h-full">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="overflow-auto h-full rounded-lg"
+        style={{ background: 'rgba(10, 10, 15, 0.5)' }}
+      >
+        <table className="min-w-full">
+          <thead>
+            <tr 
+              style={{ 
+                background: 'linear-gradient(90deg, rgba(0, 245, 255, 0.15), rgba(0, 245, 255, 0.05))',
+                borderBottom: '1px solid rgba(0, 245, 255, 0.3)'
+              }}
+            >
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider"
+                  style={{ 
+                    color: '#00f5ff',
+                    textShadow: '0 0 10px rgba(0, 245, 255, 0.5)'
+                  }}
                 >
                   {col}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody>
             {data.map((row, idx) => (
-              <tr key={idx} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <motion.tr 
+                key={idx} 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.03 }}
+                className="transition-all cursor-pointer"
+                style={{ 
+                  borderBottom: '1px solid rgba(0, 245, 255, 0.1)',
+                  background: idx % 2 === 0 ? 'rgba(0, 245, 255, 0.02)' : 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 245, 255, 0.1)';
+                  e.currentTarget.style.boxShadow = 'inset 0 0 20px rgba(0, 245, 255, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = idx % 2 === 0 ? 'rgba(0, 245, 255, 0.02)' : 'transparent';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
                 {columns.map((col) => (
-                  <td key={col} className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200 whitespace-nowrap">
+                  <td 
+                    key={col} 
+                    className="px-4 py-3 text-sm whitespace-nowrap"
+                    style={{ color: '#00f5ff', opacity: 0.8 }}
+                  >
                     {String((row as Record<string, unknown>)[col] ?? '')}
                   </td>
                 ))}
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </motion.div>
     );
   }
 
@@ -43,36 +81,76 @@ export const TableView: React.FC<TableViewProps> = ({ data }) => {
     const entries = Object.entries(data as Record<string, unknown>);
 
     return (
-      <div className="overflow-auto h-full">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="overflow-auto h-full rounded-lg"
+        style={{ background: 'rgba(10, 10, 15, 0.5)' }}
+      >
+        <table className="min-w-full">
+          <thead>
+            <tr 
+              style={{ 
+                background: 'linear-gradient(90deg, rgba(0, 245, 255, 0.15), rgba(0, 245, 255, 0.05))',
+                borderBottom: '1px solid rgba(0, 245, 255, 0.3)'
+              }}
+            >
+              <th 
+                className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider"
+                style={{ color: '#00f5ff', textShadow: '0 0 10px rgba(0, 245, 255, 0.5)' }}
+              >
                 Key
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+              <th 
+                className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider"
+                style={{ color: '#00f5ff', textShadow: '0 0 10px rgba(0, 245, 255, 0.5)' }}
+              >
                 Value
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {entries.map(([key, value]) => (
-              <tr key={key} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                <td className="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-200">{key}</td>
-                <td className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+          <tbody>
+            {entries.map(([key, value], idx) => (
+              <motion.tr 
+                key={key}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.03 }}
+                className="transition-all cursor-pointer"
+                style={{ 
+                  borderBottom: '1px solid rgba(0, 245, 255, 0.1)',
+                  background: idx % 2 === 0 ? 'rgba(0, 245, 255, 0.02)' : 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(0, 245, 255, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = idx % 2 === 0 ? 'rgba(0, 245, 255, 0.02)' : 'transparent';
+                }}
+              >
+                <td 
+                  className="px-4 py-3 text-sm font-medium"
+                  style={{ color: '#ff006e' }}
+                >
+                  {key}
+                </td>
+                <td 
+                  className="px-4 py-3 text-sm"
+                  style={{ color: '#00f5ff', opacity: 0.8 }}
+                >
                   {typeof value === 'object' ? JSON.stringify(value) : String(value)}
                 </td>
-              </tr>
+              </motion.tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </motion.div>
     );
   }
 
   // Fallback
   return (
-    <div className="p-4 text-gray-500 dark:text-gray-400">
+    <div className="p-4" style={{ color: '#00f5ff', opacity: 0.6 }}>
       Unable to render data as table. Data type: {typeof data}
     </div>
   );

@@ -1,28 +1,19 @@
 import { useMemo } from 'react';
-import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
 import { BarChart3 } from 'lucide-react';
+import {
+  CyberLineChart,
+  CyberBarChart,
+  CyberDonutChart,
+  CyberRadarChart,
+  CyberStatsGrid,
+  CyberProgressList,
+} from '@/components/charts';
 
 interface ChartViewProps {
   data: unknown;
 }
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
-
-type ChartType = 'bar' | 'line' | 'pie' | 'unknown';
+type ChartType = 'bar' | 'line' | 'donut' | 'radar' | 'stats' | 'progress' | 'unknown';
 
 interface ChartData {
   type: ChartType;
@@ -32,17 +23,15 @@ interface ChartData {
 }
 
 function analyzeData(data: unknown): ChartData {
-  // Handle non-array data
+  // Handle non-array data (metrics object)
   if (!Array.isArray(data)) {
-    // If it's an object, try to convert to chart-friendly format
     if (data && typeof data === 'object') {
       const entries = Object.entries(data as Record<string, unknown>);
-      const chartData = entries
-        .filter(([, value]) => typeof value === 'number')
-        .map(([key, value]) => ({ name: key, value: value as number }));
+      const hasNumericValues = entries.every(([, value]) => typeof value === 'number');
       
-      if (chartData.length > 0) {
-        return { type: 'pie', data: chartData, labelKey: 'name', valueKeys: ['value'] };
+      if (hasNumericValues) {
+        // Return stats type for object with numeric values
+        return { type: 'stats', data: [data as Record<string, unknown>], labelKey: '', valueKeys: [] };
       }
     }
     return { type: 'unknown', data: [], labelKey: '', valueKeys: [] };
@@ -66,19 +55,27 @@ function analyzeData(data: unknown): ChartData {
   }
 
   // Detect label key (first string key, or common names)
-  const commonLabelKeys = ['name', 'label', 'month', 'date', 'category', 'id'];
+  const commonLabelKeys = ['name', 'label', 'month', 'date', 'category', 'id', 'subject'];
   const labelKey = stringKeys.find(k => commonLabelKeys.includes(k.toLowerCase())) || stringKeys[0] || numberKeys[0];
 
   // Detect chart type based on data shape
   let chartType: ChartType = 'bar';
 
-  // If only one value key and label looks like name/category -> pie chart
+  // If only one value key and label looks like name/category -> donut chart
   if (numberKeys.length === 1 && numberKeys[0].toLowerCase() === 'value') {
-    chartType = 'pie';
+    chartType = 'donut';
   }
   // If has date-like keys -> line chart
   else if (labelKey && ['date', 'time', 'timestamp', 'day'].some(d => labelKey.toLowerCase().includes(d))) {
     chartType = 'line';
+  }
+  // If data looks like radar (multiple numeric dimensions with subject/category)
+  else if (numberKeys.length >= 3 && stringKeys.some(k => ['subject', 'category', 'skill'].includes(k.toLowerCase()))) {
+    chartType = 'radar';
+  }
+  // If data has label/value structure for progress
+  else if (keys.includes('label') && keys.includes('value') && data.length <= 6) {
+    chartType = 'progress';
   }
   // Multiple numeric values -> bar chart
   else {
@@ -96,77 +93,70 @@ function analyzeData(data: unknown): ChartData {
 export const ChartView: React.FC<ChartViewProps> = ({ data }) => {
   const chartInfo = useMemo(() => analyzeData(data), [data]);
 
-  if (chartInfo.type === 'unknown' || chartInfo.data.length === 0) {
+  if (chartInfo.type === 'unknown' || (chartInfo.data.length === 0 && chartInfo.type !== 'stats')) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500">
-        <BarChart3 size={48} className="mb-2" />
+      <div className="flex flex-col items-center justify-center h-full text-cyber-cyan/50">
+        <BarChart3 size={48} className="mb-2 animate-pulse" />
         <p className="text-sm">Cannot visualize this data as a chart</p>
-        <p className="text-xs mt-1">Data should be an array of objects with numeric values</p>
+        <p className="text-xs mt-1 opacity-60">Data should be an array of objects with numeric values</p>
       </div>
     );
   }
 
   const { type, data: chartData, labelKey, valueKeys } = chartInfo;
 
+  // For stats type, render CyberStatsGrid
+  if (type === 'stats') {
+    const statsData = (Array.isArray(data) ? data[0] : data) as Record<string, number>;
+    return (
+      <div className="w-full h-full overflow-auto p-2">
+        <CyberStatsGrid data={statsData} />
+      </div>
+    );
+  }
+
+  // For progress type
+  if (type === 'progress') {
+    const progressData = chartData.map(item => ({
+      label: String(item[labelKey] || item['label'] || ''),
+      value: Number(item['value'] || item[valueKeys[0]] || 0),
+      maxValue: Number(item['maxValue'] || 100),
+    }));
+    return (
+      <div className="w-full h-full overflow-auto p-2">
+        <CyberProgressList data={progressData} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full min-h-[200px] p-2">
-      <ResponsiveContainer width="100%" height="100%">
-        {type === 'pie' ? (
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey={valueKeys[0]}
-              nameKey={labelKey}
-              cx="50%"
-              cy="50%"
-              outerRadius="80%"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              labelLine={false}
-            >
-              {chartData.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        ) : type === 'line' ? (
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-            <XAxis dataKey={labelKey} tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend />
-            {valueKeys.map((key, index) => (
-              <Line
-                key={key}
-                type="monotone"
-                dataKey={key}
-                stroke={COLORS[index % COLORS.length]}
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
-              />
-            ))}
-          </LineChart>
-        ) : (
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-            <XAxis dataKey={labelKey} tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} />
-            <Tooltip />
-            <Legend />
-            {valueKeys.map((key, index) => (
-              <Bar
-                key={key}
-                dataKey={key}
-                fill={COLORS[index % COLORS.length]}
-                radius={[4, 4, 0, 0]}
-              />
-            ))}
-          </BarChart>
-        )}
-      </ResponsiveContainer>
+      {type === 'donut' ? (
+        <CyberDonutChart
+          data={chartData}
+          labelKey={labelKey}
+          valueKey={valueKeys[0]}
+        />
+      ) : type === 'line' ? (
+        <CyberLineChart
+          data={chartData}
+          labelKey={labelKey}
+          valueKeys={valueKeys}
+          showArea={true}
+        />
+      ) : type === 'radar' ? (
+        <CyberRadarChart
+          data={chartData}
+          labelKey={labelKey}
+          valueKeys={valueKeys}
+        />
+      ) : (
+        <CyberBarChart
+          data={chartData}
+          labelKey={labelKey}
+          valueKeys={valueKeys}
+        />
+      )}
     </div>
   );
 };

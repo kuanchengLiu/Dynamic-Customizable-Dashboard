@@ -27,7 +27,7 @@ export interface WidgetLayout {
 }
 
 // View Types for Visualization
-export type ViewType = 'JSON' | 'Table' | 'Chart';
+export type ViewType = 'JSON' | 'Table' | 'Chart' | 'BarChart' | 'LineChart' | 'DonutChart' | 'RadarChart' | 'Gauge' | 'Progress' | 'Stats';
 
 // Dashboard Widget Interface
 export interface Widget {

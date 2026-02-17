@@ -14,12 +14,22 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
   onDelete,
 }) => {
   return (
-    <div className="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600 cursor-move widget-drag-handle">
+    <div 
+      className="flex items-center justify-between px-3 py-2 border-b border-cyber-cyan/20 cursor-move widget-drag-handle"
+      style={{
+        background: 'linear-gradient(90deg, rgba(0, 245, 255, 0.05), transparent)',
+      }}
+    >
       <div className="flex items-center gap-2">
         {isEditable && (
-          <GripVertical size={16} className="text-gray-400 dark:text-gray-500" />
+          <GripVertical size={16} className="text-cyber-cyan/40" />
         )}
-        <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{title}</h3>
+        <h3 
+          className="text-sm font-medium text-cyber-cyan truncate tracking-wide"
+          style={{ textShadow: '0 0 10px rgba(0, 245, 255, 0.3)' }}
+        >
+          {title}
+        </h3>
       </div>
       {isEditable && (
         <div className="flex items-center gap-1">
@@ -27,7 +37,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             onClick={onEdit}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-600 rounded text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer"
+            className="p-1.5 rounded text-cyber-purple/70 hover:text-cyber-purple hover:bg-cyber-purple/10 transition-all cursor-pointer"
             title="Settings"
           >
             <Settings size={16} />
@@ -36,7 +46,7 @@ export const WidgetHeader: React.FC<WidgetHeaderProps> = ({
             onClick={onDelete}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="p-1 hover:bg-red-100 dark:hover:bg-red-900 rounded text-gray-500 dark:text-gray-400 hover:text-red-600 cursor-pointer"
+            className="p-1.5 rounded text-cyber-pink/70 hover:text-cyber-pink hover:bg-cyber-pink/10 transition-all cursor-pointer"
             title="Delete"
           >
             <Trash2 size={16} />

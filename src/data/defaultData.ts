@@ -1,6 +1,6 @@
 // Default sample data for demonstration and testing
 export const DEFAULT_SAMPLE_DATA = {
-  // Sales data for charts
+  // Sales data for bar charts
   salesData: [
     { month: 'Jan', sales: 4000, revenue: 2400, profit: 1600 },
     { month: 'Feb', sales: 3000, revenue: 1398, profit: 1200 },
@@ -20,7 +20,7 @@ export const DEFAULT_SAMPLE_DATA = {
     { id: 5, name: 'Eve Davis', email: 'eve@example.com', role: 'Admin', status: 'Active' },
   ],
 
-  // Product metrics for dashboard
+  // Product metrics for dashboard stats
   metrics: {
     totalUsers: 15420,
     activeUsers: 8932,
@@ -41,7 +41,7 @@ export const DEFAULT_SAMPLE_DATA = {
     { date: '2024-01-07', visitors: 1680, pageViews: 7200, bounceRate: 25 },
   ],
 
-  // Pie chart data
+  // Donut/Pie chart data
   categoryDistribution: [
     { name: 'Electronics', value: 400 },
     { name: 'Clothing', value: 300 },
@@ -49,14 +49,58 @@ export const DEFAULT_SAMPLE_DATA = {
     { name: 'Books', value: 150 },
     { name: 'Other', value: 100 },
   ],
+
+  // Radar chart data
+  skillsRadar: [
+    { subject: 'Performance', A: 120, B: 110, fullMark: 150 },
+    { subject: 'Security', A: 98, B: 130, fullMark: 150 },
+    { subject: 'Scalability', A: 86, B: 130, fullMark: 150 },
+    { subject: 'Reliability', A: 99, B: 100, fullMark: 150 },
+    { subject: 'Usability', A: 85, B: 90, fullMark: 150 },
+    { subject: 'Efficiency', A: 65, B: 85, fullMark: 150 },
+  ],
+
+  // Progress bar data
+  projectProgress: [
+    { label: 'Frontend Development', value: 85, maxValue: 100 },
+    { label: 'Backend API', value: 72, maxValue: 100 },
+    { label: 'Database Design', value: 90, maxValue: 100 },
+    { label: 'Testing Coverage', value: 65, maxValue: 100 },
+    { label: 'Documentation', value: 45, maxValue: 100 },
+  ],
+
+  // Network/System metrics
+  systemMetrics: {
+    cpuUsage: 67,
+    memoryUsage: 82,
+    diskSpace: 45,
+    networkLoad: 23,
+    activeConnections: 1247,
+    uptime: 99.9,
+  },
+
+  // Real-time style data
+  liveMetrics: [
+    { date: '00:00', cpu: 45, memory: 62, network: 30 },
+    { date: '04:00', cpu: 32, memory: 58, network: 25 },
+    { date: '08:00', cpu: 67, memory: 72, network: 45 },
+    { date: '12:00', cpu: 89, memory: 85, network: 78 },
+    { date: '16:00', cpu: 76, memory: 80, network: 65 },
+    { date: '20:00', cpu: 54, memory: 68, network: 42 },
+    { date: '24:00', cpu: 38, memory: 55, network: 28 },
+  ],
 };
 
 export type DefaultDataKey = keyof typeof DEFAULT_SAMPLE_DATA;
 
 export const DEFAULT_DATA_OPTIONS: { label: string; value: DefaultDataKey; description: string }[] = [
-  { label: 'Sales Data (Charts)', value: 'salesData', description: 'Monthly sales, revenue, and profit data' },
-  { label: 'Users (Table)', value: 'users', description: 'Sample user directory data' },
-  { label: 'Metrics (JSON)', value: 'metrics', description: 'Dashboard KPI metrics' },
-  { label: 'Traffic Data (Line Chart)', value: 'trafficData', description: 'Daily website traffic analytics' },
-  { label: 'Category Distribution (Pie)', value: 'categoryDistribution', description: 'Product category breakdown' },
+  { label: '📊 Sales Data (Bar Chart)', value: 'salesData', description: 'Monthly sales, revenue, and profit data' },
+  { label: '📈 Traffic Data (Line Chart)', value: 'trafficData', description: 'Daily website traffic analytics' },
+  { label: '🍩 Category Distribution (Donut)', value: 'categoryDistribution', description: 'Product category breakdown' },
+  { label: '🎯 Skills Radar (Radar Chart)', value: 'skillsRadar', description: 'Multi-dimensional comparison' },
+  { label: '⚡ Project Progress (Progress Bars)', value: 'projectProgress', description: 'Task completion status' },
+  { label: '💻 System Metrics (Stats Grid)', value: 'systemMetrics', description: 'Server performance KPIs' },
+  { label: '📡 Live Metrics (Area Chart)', value: 'liveMetrics', description: 'Real-time system monitoring' },
+  { label: '👥 Users (Table)', value: 'users', description: 'Sample user directory data' },
+  { label: '📋 Metrics (JSON)', value: 'metrics', description: 'Dashboard KPI metrics' },
 ];

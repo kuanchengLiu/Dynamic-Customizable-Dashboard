@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { WidgetHeader } from './WidgetHeader';
 import { DataFetcher } from './DataFetcher';
 import { ApiConfigForm } from './ApiConfigForm';
@@ -30,7 +31,16 @@ export const WidgetWrapper: React.FC<WidgetWrapperProps> = ({ widget }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="h-full flex flex-col rounded-lg overflow-hidden cyber-card"
+      style={{
+        background: 'linear-gradient(135deg, rgba(18, 18, 26, 0.95), rgba(10, 10, 15, 0.98))',
+        boxShadow: '0 0 30px rgba(0, 245, 255, 0.1), inset 0 0 30px rgba(0, 245, 255, 0.02)',
+      }}
+    >
       <WidgetHeader
         title={widget.title}
         isEditable={isEditable}
@@ -55,6 +65,6 @@ export const WidgetWrapper: React.FC<WidgetWrapperProps> = ({ widget }) => {
           onClose={() => setShowSettings(false)}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
